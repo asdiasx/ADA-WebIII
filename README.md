@@ -26,7 +26,7 @@ A porta do gateway é a 8080 e os caminhos são:
     - avisa API de Sorteio (auto - POST num soteio)
 - Tabela: APOSTA
 
-### 2- API de Sorteios
+### 2- API de Sorteios \*
 
 - Responsabilidade:
   - Registrar sorteios de apostas
@@ -35,6 +35,7 @@ A porta do gateway é a 8080 e os caminhos são:
     - client para acessar a CEF (auto)
   - GET dados do Sorteio por num do Sorteio (item)
 - Tabela: SORTEIO
+\* Para o funcionamento do cliente que acessa o site da CEF, pode ser necessario adicionar a chave cripptografica do servidor sa CEF na pasta de seguranca da JDK. Procedimento aqui: https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000094584-IDEA-Ultimate-2016-3-4-throwing-unable-to-find-valid-certification-path-to-requested-target-when-trying-to-refresh-gradle?page=1#community_comment_115000405564
 
 ### 3- API de Resultados
 
