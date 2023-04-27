@@ -10,6 +10,13 @@ Para fins de simplificação (devido ao tempo) foram abstraidos alguns conceitos
 
 O sistema permite o registro de jogos, apuração de resultados (através de consulta de API da CEF) e calculo de premiação. Mantendo o histórico dos registros persistidos em BD (in-memory H2 e R2DBC).
 
+### Rotas:
+Foi incluido o arquivo Insomnia_teste_web3.json com rotas de testes para as apis.
+A porta do gateway é a 8080 e os caminhos são:
+/api/v1/apostas
+/api/v1/sorteios
+/api/v1/resultados
+
 ### 1- API de Apostas
 
 - Responsabilidade:
