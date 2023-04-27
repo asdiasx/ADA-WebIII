@@ -2,6 +2,13 @@
 
 ## API reativas
 
+#### Versão reativa do projeto final de WebII
+
+Trata-se de um sistema de registro de jodos da Loteria (Quina).
+Para fins de simplificação (devido ao tempo) foram abstraidos alguns conceitos da versão original, como Autenticação/Autorização e alguns pontos de validação. Sendo o foco demonstrar a possibilidade de migração de uma arquitetura monolítica para microserviços reativos.
+
+O sistema permite o registro de jogos, apuração de resultados (através de consulta de API da CEF) e calculo de premiação. Mantendo o histórico dos registros persistidos em BD (in-memory H2 e R2DBC).
+
 ### 1- API de Apostas
 
 - Responsabilidade:
