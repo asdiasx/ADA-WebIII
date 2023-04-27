@@ -21,7 +21,6 @@ public class SorteioService {
     private final QuinaClient client;
     private final SorteioRepository repository;
 
-
     public Mono<SorteioDTO> getUltimoSorteio() {
         return Mono.defer(() -> {
                     log.info("Buscando na CEF o ultimo sorteio");

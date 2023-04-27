@@ -1,9 +1,8 @@
 package com.example.resultadosapi.model;
 
-import com.example.resultadosapi.client.dto.ApostaModel;
-import jakarta.persistence.*;
 import lombok.*;
-import tech.ada.minhaquina.api.sorteio.SorteioModel;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
@@ -12,17 +11,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity
+@Table("resultados")
 public class ResultadoModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "aposta_id")
-    private ApostaModel aposta;
-    @OneToOne
-    @JoinColumn(name = "sorteio_id")
-    private SorteioModel sorteio;
+    private Long apostaId;
+    private Integer numeroSorteio;
     private Integer pontuacao;
     private BigDecimal valorPremio;
 }

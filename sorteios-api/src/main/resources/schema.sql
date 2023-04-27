@@ -10,6 +10,3 @@ CREATE TABLE sorteios
     premios CHARACTER VARYING(255),
     valor_acumulado_proximo_concurso NUMERIC(38,2)
 );
-show tables;
-
-select * from SORTEIOS;

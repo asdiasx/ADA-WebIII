@@ -23,7 +23,6 @@ public class SorteioRestController {
     private final SorteioService service;
     private final SorteioRepository repository;
 
-
     @GetMapping("/ultimo")
     public Mono<SorteioDTO> getSorteioCadastradoByNumeroSorteio() {
         return Mono.defer(() -> {

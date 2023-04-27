@@ -1,18 +1,21 @@
 package com.example.resultadosapi.service;
 
-import com.example.resultadosapi.client.dto.ApostaModel;
+import com.example.resultadosapi.client.ApostasClient;
+import com.example.resultadosapi.client.SorteiosClient;
+import com.example.resultadosapi.client.dto.ApostaDTO;
 import com.example.resultadosapi.client.dto.Premio;
+import com.example.resultadosapi.client.dto.SorteioDTO;
 import com.example.resultadosapi.model.ResultadoModel;
 import com.example.resultadosapi.model.ResultadoResponse;
 import com.example.resultadosapi.repository.ResultadoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -21,42 +24,54 @@ import java.util.stream.Stream;
 public class ResultadoService {
 
     private final ResultadoRepository repository;
-    private final ResultadoService service;
+    private final ApostasClient apostasClient;
+    private final SorteiosClient sorteiosClient;
 
-    public ResultadoResponse getResultadoByAposta(Long apostaId) {
-        ApostaModel apostaModel = apostaRepository.findById(apostaId)
-                .orElseThrow(() -> new NoSuchElementException("Id da aposta não existe"));
-        sorteioService.getSorteioByAposta(apostaModel.getId());
-        ResultadoModel resultadoModel = criarResultado(apostaModel);
-
-        Optional<ResultadoModel> resultadoBancoDados = resultadoRepository
-                .findByApostaAndSorteioAndPontuacaoAndValorPremio(
-                        resultadoModel.getAposta(), resultadoModel.getSorteio(),
-                        resultadoModel.getPontuacao(), resultadoModel.getValorPremio());
-
-        return resultadoBancoDados.map(ResultadoResponse::new)
-                .orElseGet(() -> new ResultadoResponse(saveResultado(resultadoModel)));
+    public Mono<ResultadoResponse> getResultadoByAposta(Long apostaId) {
+        return repository.findByApostaId(apostaId)
+                .flatMap(this::resultadoModelToResponse)
+                .switchIfEmpty(apostasClient.buscarAposta(apostaId)
+                        .switchIfEmpty(Mono.error(new NoSuchElementException("Id da aposta não existe")))
+                        .flatMap(apostaDTO -> sorteiosClient.buscarResultadoSorteio(apostaDTO.getNumeroSorteio())
+                                .flatMap(sorteioDTO -> {
+                                    ResultadoModel resultado = criarResultado(apostaDTO, sorteioDTO);
+                                    return saveResultado(resultado)
+                                            .flatMap(this::resultadoModelToResponse);
+                                })));
     }
 
+    private Mono<ResultadoResponse> resultadoModelToResponse(ResultadoModel resultadoModel) {
+        return Mono.just(resultadoModel)
+                .flatMap(resultado -> apostasClient.buscarAposta(resultado.getApostaId())
+                        .switchIfEmpty(Mono.error(new NoSuchElementException("Id da aposta não existe")))
+                        .flatMap(apostaDTO -> sorteiosClient.buscarResultadoSorteio(apostaDTO.getNumeroSorteio())
+                                .map(sorteioDTO -> new ResultadoResponse(
+                                        resultado.getNumeroSorteio(),
+                                        sorteioDTO.getDataSorteio(),
+                                        sorteioDTO.getDezenasSorteadas(),
+                                        apostaDTO.getDezenas(),
+                                        sorteioDTO.isAcumulado(),
+                                        resultado.getPontuacao(),
+                                        resultado.getValorPremio()
+                                ))));
+    }
 
-    private ResultadoModel criarResultado(ApostaModel apostaModel) {
-        SorteioModel sorteioModel = sorteioRepository.findByNumeroSorteio(apostaModel.getNumeroSorteio()).orElseThrow();
-        int[] dezenasApostadas = apostaModel.getDezenas();
-        int[] dezenasSorteadas = sorteioModel.getDezenasSorteadas();
+    private ResultadoModel criarResultado(ApostaDTO aposta, SorteioDTO sorteio) {
+        int[] dezenasApostadas = aposta.getDezenas();
+        int[] dezenasSorteadas = sorteio.getDezenasSorteadas();
         Integer pontuacao = calcularPontuacao(dezenasApostadas, dezenasSorteadas);
-        BigDecimal valorPremio = calcularValorPremio(pontuacao, Premio.convertStringToPremio(sorteioModel.getPremios()));
+        BigDecimal valorPremio = calcularValorPremio(pontuacao, sorteio.getPremios());
         ResultadoModel resultadoModel = new ResultadoModel();
-        resultadoModel.setSorteio(sorteioModel);
-        resultadoModel.setAposta(apostaModel);
+        resultadoModel.setNumeroSorteio(sorteio.getNumeroSorteio());
+        resultadoModel.setApostaId(aposta.getId());
         resultadoModel.setPontuacao(pontuacao);
         resultadoModel.setValorPremio(valorPremio);
         return resultadoModel;
     }
 
-    private ResultadoModel saveResultado(ResultadoModel resultadoModel) {
-        return resultadoRepository.save(resultadoModel);
+    private Mono<ResultadoModel> saveResultado(ResultadoModel resultadoModel) {
+        return repository.save(resultadoModel);
     }
-
 
     private BigDecimal calcularValorPremio(Integer pontuacao, List<Premio> premios) {
         return premios.stream()

@@ -32,18 +32,4 @@ public class SorteiosClient {
                     }
                 });
     }
-
-    public Mono<SorteioDTO> buscarResultadoSorteio() {
-        return this.client
-                .get()
-                .uri(CATALOGO_URI + "/ultimo")
-                .accept(MediaType.APPLICATION_JSON)
-                .exchangeToMono(result -> {
-                    if (result.statusCode().is2xxSuccessful()) {
-                        return result.bodyToMono(SorteioDTO.class);
-                    } else {
-                        return Mono.error(new RuntimeException("Erro na chamada"));
-                    }
-                });
-    }
 }

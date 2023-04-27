@@ -37,5 +37,6 @@
 
 ### Débitos técnico devido ao prazo:
 
+\* automatizar criacao de registros no db de resultados quando aposta e sorteio forem criados.  
 \* falta implementar validação  
 \* mudar id de Long para UUID

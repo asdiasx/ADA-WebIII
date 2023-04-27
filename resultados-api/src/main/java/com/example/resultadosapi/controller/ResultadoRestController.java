@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,7 +17,7 @@ public class ResultadoRestController {
     private final ResultadoService service;
 
     @GetMapping("/{apostaID}")
-    public ResultadoResponse getResultado(@PathVariable("apostaID") Long apostaId) {
+    public Mono<ResultadoResponse> getResultado(@PathVariable("apostaID") Long apostaId) {
         return service.getResultadoByAposta(apostaId);
     }
 }

@@ -16,15 +16,4 @@ public class ApostaDTO {
     @GameConstraint
     private int[] dezenas;
     private LocalDate dataJogo;
-
-    public static ApostaDTO fromModel(ApostaModel apostaModel) {
-        return new ApostaDTO(apostaModel.getId(), apostaModel.getNumeroSorteio(), apostaModel.getDezenas(), apostaModel.getDataJogo());
-    }
-
-    public static ApostaModel convertToModel(ApostaModel apostaModel, ApostaDTO apostaDTO) {
-        apostaModel.setNumeroSorteio(apostaDTO.getNumeroSorteio());
-        apostaModel.setDezenas(apostaDTO.getDezenas());
-        apostaModel.setDataJogo(apostaDTO.getDataJogo());
-        return apostaModel;
-    }
 }

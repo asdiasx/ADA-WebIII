@@ -56,6 +56,4 @@ public class SorteioDTO {
     private void convertDateProximoSorteio(String dataString) {
         this.dataProximoSorteio = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
-
-
 }

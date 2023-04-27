@@ -18,15 +18,4 @@ public class ResultadoResponse {
     private boolean acumulado;
     private Integer pontuacao;
     private BigDecimal valorPremio;
-
-    public ResultadoResponse(ResultadoModel resultadoModel) {
-        this.numeroSorteio = resultadoModel.getSorteio().getNumeroSorteio();
-        this.dataSorteio = resultadoModel.getSorteio().getDataSorteio();
-        this.dezenasSorteadas = resultadoModel.getSorteio().getDezenasSorteadas();
-        this.dezenasApostadas = resultadoModel.getAposta().getDezenas();
-        this.acumulado = resultadoModel.getSorteio().isAcumulado();
-        this.pontuacao = resultadoModel.getPontuacao();
-        this.valorPremio = resultadoModel.getValorPremio();
-
-    }
 }
