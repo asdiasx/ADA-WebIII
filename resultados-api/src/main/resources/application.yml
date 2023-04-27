@@ -1,0 +1,16 @@
+server:
+  port: 8083
+
+spring:
+  r2dbc:
+    url: r2dbc:h2:mem:///testdb
+    username: sa
+    password:
+
+  datasource:
+    platform: h2
+
+  h2:
+    console:
+      enabled: true
+
