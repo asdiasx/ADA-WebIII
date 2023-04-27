@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: apostas
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/apostas/**
+
+        - id: sorteios
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/sorteios/**
+
+        - id: resultados
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/v1/resultados/**
