@@ -13,9 +13,9 @@ O sistema permite o registro de jogos, apuração de resultados (através de con
 ### Rotas:
 Foi incluido o arquivo Insomnia_teste_web3.json com rotas de testes para as apis.
 A porta do gateway é a 8080 e os caminhos são:
-/api/v1/apostas
-/api/v1/sorteios
-/api/v1/resultados
+/api/v1/apostas  
+/api/v1/sorteios  
+/api/v1/resultados  
 
 ### 1- API de Apostas
 
