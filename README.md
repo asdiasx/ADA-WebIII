@@ -50,7 +50,7 @@ A porta do gateway é a 8080 e os caminhos são:
       - responde com resultado
 - Tabela: RESULTADO
 
-### Débitos técnico devido ao prazo:
+### Débitos técnicos devido ao prazo:
 
 \* automatizar criacao de registros no db de resultados quando aposta e sorteio forem criados.  
 \* falta implementar validação  
